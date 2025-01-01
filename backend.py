@@ -31,7 +31,7 @@ def get_data(days,city):
     tempeture_array = [i['main']['temp'] for i in respond1_reduced_by_days]
     sky_array = [i['weather'][0]['main'] for i in respond1_reduced_by_days]
     
-    return date_time_array, tempeture_array, sky_array
+    return {'dates': date_time_array, 'temps': tempeture_array, 'skies': sky_array}
 
 
 if __name__=="__main__":

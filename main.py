@@ -1,6 +1,6 @@
 import streamlit as st
 import pandas as pd
-import plotly.express as px
+#import plotly.express as px
 import backend
 
 # Add title, text input, slider, selectbox, subheadder
@@ -14,24 +14,14 @@ option=st.selectbox('Select data to view',('Tempeture','Sky'))
 
 st.subheader(f'{option} for the next {days} days in {place}')
 
-
-#plotdata = {
-#        "date":['2025-1-2','2025-1-3','2025-1-4'],
-#        "temp":['30','32','29'],
-#    }
-#plotdata['temp'] = [days*int(i) for i in plotdata['temp']]
-
-#st.line_chart(pd.DataFrame(plotdata),x='date',y='temp')
-
 if place:
 
     try:
         # Fetch tempeture/sky data
-        date_array,temp_array,sky_array=backend.get_data(days,place)
+        data=backend.get_data(days,place)
         # Plot the graph
         if option=='Tempeture':
-            plot=px.line(x=date_array,y=temp_array,labels={'x':'Date','y':'Tempeture (C)'})
-            st.plotly_chart(plot)
+            st.line_chart(pd.DataFrame(data),x='dates',y='temps',x_label='Dates',y_label='Tempeture (C)')
         elif option=='Sky':
             image_path_dict = {
                 'Clear': 'images/clear.png',
@@ -40,7 +30,29 @@ if place:
                 'Snow': 'images/snow.png',
 
             }
-            image_path_array = [image_path_dict[i] for i in sky_array]
-            st.image(image_path_array,date_array,115)
+            image_path_array = [image_path_dict[i] for i in data['skies']]
+            st.image(image_path_array,data['dates'],115)
     except KeyError:
         st.warning('Country name not found')
+
+# if place:
+
+#     try:
+#         # Fetch tempeture/sky data
+#         date_array,temp_array,sky_array=backend.get_data(days,place)
+#         # Plot the graph
+#         if option=='Tempeture':
+#             plot=px.line(x=date_array,y=temp_array,labels={'x':'Date','y':'Tempeture (C)'})
+#             st.plotly_chart(plot)
+#         elif option=='Sky':
+#             image_path_dict = {
+#                 'Clear': 'images/clear.png',
+#                 'Clouds': 'images/cloud.png',
+#                 'Rain': 'images/rain.png',
+#                 'Snow': 'images/snow.png',
+
+#             }
+#             image_path_array = [image_path_dict[i] for i in sky_array]
+#             st.image(image_path_array,date_array,115)
+#     except KeyError:
+#         st.warning('Country name not found')
