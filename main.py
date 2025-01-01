@@ -24,21 +24,23 @@ st.subheader(f'{option} for the next {days} days in {place}')
 #st.line_chart(pd.DataFrame(plotdata),x='date',y='temp')
 
 if place:
-# Fetch tempeture/sky data
-    date_array,temp_array,sky_array=backend.get_data(days,place)
 
+    try:
+        # Fetch tempeture/sky data
+        date_array,temp_array,sky_array=backend.get_data(days,place)
+        # Plot the graph
+        if option=='Tempeture':
+            plot=px.line(x=date_array,y=temp_array,labels={'x':'Date','y':'Tempeture (C)'})
+            st.plotly_chart(plot)
+        elif option=='Sky':
+            image_path_dict = {
+                'Clear': 'images/clear.png',
+                'Clouds': 'images/cloud.png',
+                'Rain': 'images/rain.png',
+                'Snow': 'images/snow.png',
 
-# Plot the graph
-    if option=='Tempeture':
-        plot=px.line(x=date_array,y=temp_array,labels={'x':'Date','y':'Tempeture (C)'})
-        st.plotly_chart(plot)
-    elif option=='Sky':
-        image_path_dict = {
-            'Clear': 'images/clear.png',
-            'Clouds': 'images/cloud.png',
-            'Rain': 'images/rain.png',
-            'Snow': 'images/snow.png',
-
-        }
-        image_path_array = [image_path_dict[i] for i in sky_array]
-        st.image(image_path_array,date_array,115)
+            }
+            image_path_array = [image_path_dict[i] for i in sky_array]
+            st.image(image_path_array,date_array,115)
+    except KeyError:
+        st.warning('Country name not found')
