@@ -34,7 +34,6 @@ if place:
                 }
                 image_path_array = [image_path_dict[i] for i in data['skies']]
                 image_caption_array = [data['skies_desc'][i]+' '+data['dates'][i] for i in range(len(data['dates']))]
-                print(image_caption_array)
                 st.image(image_path_array,image_caption_array,115)
             case 'Max/Min Tempeture':
                 st.area_chart(
