@@ -2,7 +2,11 @@
 
 ## What is this app?
 
-This app fetch weather data (tempeture or sky condition) from openweathermap api, and display the visualized data in a graph format. User can search weather from any cities around world in the next 1-5 days, in 3 hours intervels.
+This app fetch weather data (tempeture, sky condition, max/min tempeture) from openweathermap api, and visualize the data in a graph format.
+
+User can search for weather for any city around world.
+
+Data is avaliable for the next 1-5 days, in 3 hours intervels.
 
 ## Library used in this app:
 
