@@ -10,28 +10,42 @@ place=st.text_input('Place')
 
 days=st.slider('Forecast Days',1,5, help='Slide to see data for more dates')
 
-option=st.selectbox('Select data to view',('Tempeture','Sky'))
+option=st.selectbox('Select data to view',('Tempeture','Sky','Max/Min Tempeture'))
 
 st.subheader(f'{option} for the next {days} days in {place}')
 
+# fetch data from backend + plot graphs
 if place:
 
     try:
         # Fetch tempeture/sky data
         data=backend.get_data(days,place)
-        # Plot the graph
-        if option=='Tempeture':
-            st.line_chart(pd.DataFrame(data),x='dates',y='temps',x_label='Dates',y_label='Tempeture (C)')
-        elif option=='Sky':
-            image_path_dict = {
-                'Clear': 'images/clear.png',
-                'Clouds': 'images/cloud.png',
-                'Rain': 'images/rain.png',
-                'Snow': 'images/snow.png',
 
-            }
-            image_path_array = [image_path_dict[i] for i in data['skies']]
-            st.image(image_path_array,data['dates'],115)
+        # Plot the graph
+        match option:
+            case 'Tempeture':
+                st.line_chart(pd.DataFrame(data),x='dates',y='temps',x_label='Dates',y_label='Tempeture (C)')
+            case 'Sky':
+                image_path_dict = {
+                    'Clear': 'images/clear.png',
+                    'Clouds': 'images/cloud.png',
+                    'Rain': 'images/rain.png',
+                    'Snow': 'images/snow.png',
+                }
+                image_path_array = [image_path_dict[i] for i in data['skies']]
+                st.image(image_path_array,data['dates'],115)
+            case 'Max/Min Tempeture':
+                st.area_chart(
+                    pd.DataFrame(data),
+                    x="dates",
+                    y=["temp_maxs", "temp_mins"],
+                    #color=["#FF0000", "#0000FF"],
+                    x_label='Dates',
+                    y_label='Tempeture (C)'
+                )
+            case _:
+                st.warning('Invalid selection')
+
     except KeyError:
         st.warning('Country name not found')
 
